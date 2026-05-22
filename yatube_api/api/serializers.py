@@ -3,15 +3,23 @@ from rest_framework import serializers
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Post
         fields = ('id', 'text', 'author', 'image', 'group', 'pub_date')
+        read_only_fields = ('author', 'pub_date')
 
 
 class PostListSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Post
-        fields = ('id', 'text', 'author', 'pub_date')
+        fields = ('id', 'text', 'author', 'image', 'group', 'pub_date')
+        read_only_fields = (
+            'id', 'text', 'author', 'image', 'group', 'pub_date'
+        )
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -23,16 +31,23 @@ class GroupSerializer(serializers.ModelSerializer):
 class GroupListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('id', 'title', 'slug')
+        fields = ('id', 'title', 'slug', 'description')
+        read_only_fields = ('id', 'title', 'slug', 'description')
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Comment
         fields = ('id', 'author', 'post', 'text', 'created')
+        read_only_fields = ('author', 'post', 'created')
 
 
 class CommentListSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'created', 'text')
+        fields = ('id', 'author', 'post', 'text', 'created')
+        read_only_fields = ('id', 'author', 'post', 'text', 'created')

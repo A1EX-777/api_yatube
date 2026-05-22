@@ -5,7 +5,9 @@ from rest_framework import (
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
+from .permissions import IsAuthorOrReadOnly
 from posts.models import Post, Group, Comment
 from .serializers import (
     PostSerializer, PostListSerializer,
@@ -17,16 +19,21 @@ from .serializers import (
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':
             return PostListSerializer
         return PostSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-class GroupViewSet(viewsets.ModelViewSet):
+
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -35,8 +42,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':
