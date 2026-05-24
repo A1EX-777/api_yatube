@@ -56,7 +56,7 @@ source venv/Scripts/activate  # Windows
 Установить зависимости из файла requirements.txt:
 
 ```
-python3 -m pip install --upgrade pip
+python -m pip install --upgrade pip
 ```
 
 ```
@@ -69,13 +69,13 @@ cd yatube_api
 ```
 
 ```
-python3 manage.py migrate
+python manage.py migrate
 ```
 
 Запустить проект:
 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 
 
